@@ -3,13 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { DocumentaryCard } from "@/components/documentary-card";
 import { CategoryFilter } from "@/components/category-filter";
 import type { Category } from "@/lib/documentaries";
+import type { Documentary } from "@shared/schema";
 import { Film } from "lucide-react";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<Category>("All");
   const [key, setKey] = useState(0);
 
-  const { data: documentary, isLoading } = useQuery({
+  const { data: documentary, isLoading } = useQuery<Documentary>({
     queryKey: [
       "/api/documentaries/random",
       selectedCategory !== "All" ? `?category=${selectedCategory}` : "",
