@@ -2,18 +2,19 @@
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/server/index.ts"
+      "source": "/api/:path*",
+      "destination": "/server/index.ts"
     },
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/"
     }
-  ]
+  ],
+  "functions": {
+    "/server/index.ts": {
+      "runtime": "@vercel/node@18"
+    }
+  }
 }

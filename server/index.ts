@@ -38,10 +38,11 @@ app.get("/api/documentaries", async (_req, res) => {
   }
 });
 
-// Error handling middleware
+// Error handling
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Server Error:', err);
   res.status(500).json({ message: 'Internal Server Error' });
 });
 
+// For Vercel serverless deployment
 export default app;
