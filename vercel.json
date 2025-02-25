@@ -1,12 +1,16 @@
 {
+  "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "devCommand": "npm run dev",
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api"
+      "source": "/api/documentaries/random",
+      "destination": "/api/documentaries"
+    },
+    {
+      "source": "/api/documentaries",
+      "destination": "/api/documentaries"
     }
   ]
 }
