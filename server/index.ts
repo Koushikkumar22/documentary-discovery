@@ -39,6 +39,12 @@ app.get("/api/documentaries", async (_req, res) => {
   }
 });
 
+// Handle errors
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('Server Error:', err);
+  res.status(500).json({ message: 'Internal Server Error' });
+});
+
 // Serve static files for production
 if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(process.cwd(), "dist");
@@ -49,14 +55,19 @@ if (process.env.NODE_ENV === 'production') {
   app.get("*", (_req, res) => {
     res.sendFile(path.join(distPath, "index.html"));
   });
-} else {
-    // Serve static files from the dist directory (for development)
-    app.use(express.static(path.join(process.cwd(), "dist")));
+}
 
-    // Serve index.html for all other routes (SPA fallback)
+
+// For local development only
+if (process.env.NODE_ENV !== 'production') {
+  const port = process.env.PORT || 5000;
+  app.use(express.static(path.join(process.cwd(), "dist")));
     app.get("*", (_req, res) => {
       res.sendFile(path.join(process.cwd(), "dist", "index.html"));
     });
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
 }
 
 export default app;
