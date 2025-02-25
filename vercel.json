@@ -5,7 +5,7 @@
   "framework": "vite",
   "functions": {
     "api/**/*.ts": {
-      "runtime": "now-node@1.0.0",
+      "runtime": "now-node@2.0.0",
       "memory": 1024
     }
   },
