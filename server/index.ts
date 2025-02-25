@@ -1,5 +1,6 @@
 import express from "express";
 import { storage } from "./storage";
+import path from "path";
 
 const app = express();
 
@@ -36,19 +37,12 @@ app.get("/api/documentaries", async (_req, res) => {
   }
 });
 
-// Error handling
-app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('Server Error:', err);
-  res.status(500).json({ message: 'Internal Server Error' });
+// Serve static files from the dist directory
+app.use(express.static(path.join(process.cwd(), "dist")));
+
+// Serve index.html for all other routes (SPA fallback)
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(process.cwd(), "dist", "index.html"));
 });
 
-// Export for Vercel
 export default app;
-
-// Start server if running directly
-if (require.main === module) {
-  const port = process.env.PORT || 5000;
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-}
