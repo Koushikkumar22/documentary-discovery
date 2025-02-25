@@ -6,11 +6,11 @@
   "rewrites": [
     {
       "source": "/api/documentaries/random",
-      "destination": "/api/documentaries"
+      "destination": "/api/random"
     },
     {
       "source": "/api/documentaries",
-      "destination": "/api/documentaries"
+      "destination": "/api/index"
     }
   ]
 }
