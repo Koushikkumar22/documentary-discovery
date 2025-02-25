@@ -1,6 +1,5 @@
 import express from "express";
 import { storage } from "./storage";
-import path from "path";
 
 const app = express();
 
@@ -39,35 +38,10 @@ app.get("/api/documentaries", async (_req, res) => {
   }
 });
 
-// Handle errors
+// Error handling middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Server Error:', err);
   res.status(500).json({ message: 'Internal Server Error' });
 });
-
-// Serve static files for production
-if (process.env.NODE_ENV === 'production') {
-  const distPath = path.join(process.cwd(), "dist");
-  console.log('Serving static files from:', distPath);
-  app.use(express.static(distPath));
-
-  // SPA fallback
-  app.get("*", (_req, res) => {
-    res.sendFile(path.join(distPath, "index.html"));
-  });
-}
-
-
-// For local development only
-if (process.env.NODE_ENV !== 'production') {
-  const port = process.env.PORT || 5000;
-  app.use(express.static(path.join(process.cwd(), "dist")));
-    app.get("*", (_req, res) => {
-      res.sendFile(path.join(process.cwd(), "dist", "index.html"));
-    });
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-}
 
 export default app;
