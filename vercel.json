@@ -1,16 +1,15 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/documentaries/random",
-      "destination": "/api/random"
-    },
+      "src": "server/index.ts",
+      "use": "@vercel/node@18"
+    }
+  ],
+  "routes": [
     {
-      "source": "/api/documentaries",
-      "destination": "/api/index"
+      "src": "/(.*)",
+      "dest": "/server/index.ts"
     }
   ]
 }
