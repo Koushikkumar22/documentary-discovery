@@ -1,11 +1,10 @@
-import express, { type Request, Response, NextFunction } from "express";
+import express from "express";
 import { storage } from "./storage";
 
 const app = express();
 
 // Basic middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 // CORS headers
 app.use((_req, res, next) => {
@@ -37,19 +36,19 @@ app.get("/api/documentaries", async (_req, res) => {
   }
 });
 
-// Error handling middleware
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  console.error(err);
+// Error handling
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('Server Error:', err);
   res.status(500).json({ message: 'Internal Server Error' });
 });
 
-// Export for serverless
+// Export for Vercel
 export default app;
 
-// Only listen if running directly (not in serverless)
+// Start server if running directly
 if (require.main === module) {
   const port = process.env.PORT || 5000;
-  app.listen(port, "0.0.0.0", () => {
+  app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
 }
