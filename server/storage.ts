@@ -1,14 +1,15 @@
-import { documentaries, type Documentary, type InsertDocumentary } from "@shared/schema";
+import { documentaries, type Documentary } from "@shared/schema";
 
 export interface IStorage {
   getRandomDocumentary(category?: string): Promise<Documentary>;
   getAllDocumentaries(): Promise<Documentary[]>;
 }
 
-export class MemStorage implements IStorage {
+class MemStorage implements IStorage {
+  private static instance: MemStorage;
   private documentaries: Documentary[];
 
-  constructor() {
+  private constructor() {
     this.documentaries = [
       {
         id: 1,
@@ -85,10 +86,22 @@ export class MemStorage implements IStorage {
     ];
   }
 
+  public static getInstance(): MemStorage {
+    if (!MemStorage.instance) {
+      MemStorage.instance = new MemStorage();
+    }
+    return MemStorage.instance;
+  }
+
   async getRandomDocumentary(category?: string): Promise<Documentary> {
     const filtered = category 
       ? this.documentaries.filter(d => d.category === category)
       : this.documentaries;
+
+    if (filtered.length === 0) {
+      throw new Error(`No documentaries found${category ? ` for category: ${category}` : ''}`);
+    }
+
     const randomIndex = Math.floor(Math.random() * filtered.length);
     return filtered[randomIndex];
   }
@@ -98,4 +111,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Export a singleton instance
+export const storage = MemStorage.getInstance();
